@@ -1,2 +1,5 @@
 D:\secured-todo-backend\src\main\java\com\example\todo\controller\HealthController.java
+D:\secured-todo-backend\src\main\java\com\example\todo\entity\BaseEntity.java
+D:\secured-todo-backend\src\main\java\com\example\todo\entity\Todo.java
+D:\secured-todo-backend\src\main\java\com\example\todo\entity\User.java
 D:\secured-todo-backend\src\main\java\com\example\todo\TodoApplication.java

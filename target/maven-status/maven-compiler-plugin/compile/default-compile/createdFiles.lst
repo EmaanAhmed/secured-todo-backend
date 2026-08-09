@@ -1,2 +1,5 @@
-com\example\todo\controller\HealthController.class
+com\example\todo\entity\User.class
 com\example\todo\TodoApplication.class
+com\example\todo\entity\Todo.class
+com\example\todo\controller\HealthController.class
+com\example\todo\entity\BaseEntity.class
