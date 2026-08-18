@@ -1,5 +1,13 @@
 D:\secured-todo-backend\src\main\java\com\example\todo\controller\HealthController.java
+D:\secured-todo-backend\src\main\java\com\example\todo\dto\request\RegisterRequest.java
+D:\secured-todo-backend\src\main\java\com\example\todo\dto\request\TodoCreateRequest.java
+D:\secured-todo-backend\src\main\java\com\example\todo\dto\request\TodoUpdateRequest.java
+D:\secured-todo-backend\src\main\java\com\example\todo\dto\response\TodoResponse.java
+D:\secured-todo-backend\src\main\java\com\example\todo\dto\response\UserResponse.java
 D:\secured-todo-backend\src\main\java\com\example\todo\entity\BaseEntity.java
 D:\secured-todo-backend\src\main\java\com\example\todo\entity\Todo.java
 D:\secured-todo-backend\src\main\java\com\example\todo\entity\User.java
+D:\secured-todo-backend\src\main\java\com\example\todo\repository\specification\TodoSpecifications.java
+D:\secured-todo-backend\src\main\java\com\example\todo\repository\TodoRepository.java
+D:\secured-todo-backend\src\main\java\com\example\todo\repository\UserRepository.java
 D:\secured-todo-backend\src\main\java\com\example\todo\TodoApplication.java

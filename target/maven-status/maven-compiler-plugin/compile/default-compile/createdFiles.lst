@@ -1,5 +1,13 @@
 com\example\todo\entity\User.class
+com\example\todo\repository\specification\TodoSpecifications.class
+com\example\todo\dto\request\RegisterRequest.class
+com\example\todo\dto\request\TodoCreateRequest.class
+com\example\todo\dto\response\TodoResponse.class
 com\example\todo\TodoApplication.class
+com\example\todo\dto\request\TodoUpdateRequest.class
 com\example\todo\entity\Todo.class
 com\example\todo\controller\HealthController.class
 com\example\todo\entity\BaseEntity.class
+com\example\todo\dto\response\UserResponse.class
+com\example\todo\repository\TodoRepository.class
+com\example\todo\repository\UserRepository.class
