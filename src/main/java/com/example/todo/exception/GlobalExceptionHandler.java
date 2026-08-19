@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.example.todo.dto.response.ApiError;
 
@@ -19,91 +22,116 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+        private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleResourceNotFoundException(ResourceNotFoundException exception,
-            HttpServletRequest request) {
-        return buildResponse(
-                HttpStatus.NOT_FOUND,
-                exception.getMessage(),
-                request.getRequestURI(),
-                null);
-    }
+        @ExceptionHandler(ResourceNotFoundException.class)
+        public ResponseEntity<ApiError> handleResourceNotFoundException(ResourceNotFoundException exception,
+                        HttpServletRequest request) {
+                return buildResponse(
+                                HttpStatus.NOT_FOUND,
+                                exception.getMessage(),
+                                request.getRequestURI(),
+                                null);
+        }
 
-    @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<ApiError> handleDuplicateResourceException(DuplicateResourceException exception,
-            HttpServletRequest request) {
-        return buildResponse(
-                HttpStatus.CONFLICT,
-                exception.getMessage(),
-                request.getRequestURI(),
-                null);
-    }
+        @ExceptionHandler(DuplicateResourceException.class)
+        public ResponseEntity<ApiError> handleDuplicateResourceException(DuplicateResourceException exception,
+                        HttpServletRequest request) {
+                return buildResponse(
+                                HttpStatus.CONFLICT,
+                                exception.getMessage(),
+                                request.getRequestURI(),
+                                null);
+        }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
-            HttpServletRequest request) {
-        return buildResponse(
-                HttpStatus.BAD_REQUEST,
-                exception.getMessage(),
-                request.getRequestURI(),
-                null);
-    }
+        @ExceptionHandler(BadRequestException.class)
+        public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception,
+                        HttpServletRequest request) {
+                return buildResponse(
+                                HttpStatus.BAD_REQUEST,
+                                exception.getMessage(),
+                                request.getRequestURI(),
+                                null);
+        }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException exception,
-            HttpServletRequest request) {
-        List<ApiError.FieldValidationError> fieldErrors = exception.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> new ApiError.FieldValidationError(
-                        fieldError.getField(), fieldError.getDefaultMessage()))
-                .toList();
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ApiError> handleValidationException(MethodArgumentNotValidException exception,
+                        HttpServletRequest request) {
+                List<ApiError.FieldValidationError> fieldErrors = exception.getBindingResult().getFieldErrors().stream()
+                                .map(fieldError -> new ApiError.FieldValidationError(
+                                                fieldError.getField(), fieldError.getDefaultMessage()))
+                                .toList();
 
-        return buildResponse(
-                HttpStatus.BAD_REQUEST,
-                "Validation failed",
-                request.getRequestURI(),
-                fieldErrors);
-    }
+                return buildResponse(
+                                HttpStatus.BAD_REQUEST,
+                                "Validation failed",
+                                request.getRequestURI(),
+                                fieldErrors);
+        }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiError> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception,
-            HttpServletRequest request) {
-        return buildResponse(
-                HttpStatus.BAD_REQUEST,
-                "Malformed JSON request",
-                request.getRequestURI(),
-                null);
-    }
+        @ExceptionHandler(HttpMessageNotReadableException.class)
+        public ResponseEntity<ApiError> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception,
+                        HttpServletRequest request) {
+                return buildResponse(
+                                HttpStatus.BAD_REQUEST,
+                                "Malformed JSON request",
+                                request.getRequestURI(),
+                                null);
+        }
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiError> handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException exception,
-            HttpServletRequest request) {
-        return buildResponse(
-                HttpStatus.METHOD_NOT_ALLOWED,
-                exception.getMessage(),
-                request.getRequestURI(),
-                null);
-    }
+        @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+        public ResponseEntity<ApiError> handleHttpRequestMethodNotSupportedException(
+                        HttpRequestMethodNotSupportedException exception,
+                        HttpServletRequest request) {
+                return buildResponse(
+                                HttpStatus.METHOD_NOT_ALLOWED,
+                                exception.getMessage(),
+                                request.getRequestURI(),
+                                null);
+        }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGenericException(Exception exception,
-            HttpServletRequest request) {
+        @ExceptionHandler(MissingRequestHeaderException.class)
+        public ResponseEntity<ApiError> handleMissingRequestHeaderException(MissingRequestHeaderException exception,
+                        HttpServletRequest request) {
+                return buildResponse(HttpStatus.BAD_REQUEST, "Missing required header: " + exception.getHeaderName(),
+                                request.getRequestURI(), null);
+        }
 
-        log.error("Unhandled exception occurred", exception);
-        return buildResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred",
-                request.getRequestURI(),
-                null);
-    }
+        @ExceptionHandler(MissingServletRequestParameterException.class)
+        public ResponseEntity<ApiError> handleMissingServletRequestParameterException(
+                        MissingServletRequestParameterException exception,
+                        HttpServletRequest request) {
+                return buildResponse(HttpStatus.BAD_REQUEST,
+                                "Missing required parameter: " + exception.getParameterName(),
+                                request.getRequestURI(), null);
+        }
 
-    private ResponseEntity<ApiError> buildResponse(HttpStatus status, String message, String path,
-            List<ApiError.FieldValidationError> fieldErrors) {
-        ApiError apiError = new ApiError(LocalDateTime.now(), status.value(), status.getReasonPhrase(), message, path,
-                fieldErrors);
+        @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+        public ResponseEntity<ApiError> handleMethodArgumentTypeMismatchException(
+                        MethodArgumentTypeMismatchException exception,
+                        HttpServletRequest request) {
+                return buildResponse(HttpStatus.BAD_REQUEST, "Missing value for parameter: " + exception.getName(),
+                                request.getRequestURI(), null);
+        }
 
-        return new ResponseEntity<>(apiError, status);
-    }
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ApiError> handleGenericException(Exception exception,
+                        HttpServletRequest request) {
+
+                log.error("Unhandled exception occurred", exception);
+                return buildResponse(
+                                HttpStatus.INTERNAL_SERVER_ERROR,
+                                "An unexpected error occurred",
+                                request.getRequestURI(),
+                                null);
+        }
+
+        private ResponseEntity<ApiError> buildResponse(HttpStatus status, String message, String path,
+                        List<ApiError.FieldValidationError> fieldErrors) {
+                ApiError apiError = new ApiError(LocalDateTime.now(), status.value(), status.getReasonPhrase(), message,
+                                path,
+                                fieldErrors);
+
+                return new ResponseEntity<>(apiError, status);
+        }
 }
