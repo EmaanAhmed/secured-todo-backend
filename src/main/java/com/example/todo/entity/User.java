@@ -23,7 +23,7 @@ public class User extends BaseEntity {
         // JPA requires a no-argument constructor
     }
 
-    protected User(String email, String password, String fullName) {
+    public User(String email, String password, String fullName) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
